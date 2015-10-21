@@ -21,6 +21,7 @@ class RequestStats(object):
         self.max_requests = None
         self.last_request_timestamp = None
         self.start_time = None
+        self.end_time = 0
     
     def get(self, name, method):
         """
@@ -63,6 +64,9 @@ class RequestStats(object):
         self.max_requests = None
         self.last_request_timestamp = None
         self.start_time = None
+        
+    def set_end_time(self):
+        self.end_time = time.time();
         
 
 class StatsEntry(object):

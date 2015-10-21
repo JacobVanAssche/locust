@@ -81,11 +81,12 @@ def request_stats_csv():
             '"Average Content Size"',
             '"Requests/s"',
             '"Start Time"',
+            '"End Time"',
         ])
     ]
     
     for s in chain(_sort_stats(runners.locust_runner.request_stats), [runners.locust_runner.stats.aggregated_stats("Total", full_request_history=True)]):
-        rows.append('"%s","%s",%i,%i,%i,%i,%i,%i,%i,%.2f,%s' % (
+        rows.append('"%s","%s",%i,%i,%i,%i,%i,%i,%i,%.2f,%s,%s' % (
             s.method,
             s.name,
             s.num_requests,
@@ -97,6 +98,7 @@ def request_stats_csv():
             s.avg_content_length,
             s.total_rps,
             s.start_time,
+            s.end_time,
         ))
 
     response = make_response("\n".join(rows))
@@ -137,6 +139,9 @@ def distribution_stats_csv():
 @app.route('/stats/requests')
 @memoize(timeout=DEFAULT_CACHE_TIME, dynamic_timeout=True)
 def request_stats():
+
+    if runners.locust_runner.state == ("stopped"):
+        runners.locust_runner.stats.set_end_time()
     stats = []
     for s in chain(_sort_stats(runners.locust_runner.request_stats), [runners.locust_runner.stats.aggregated_stats("Total")]):
         stats.append({
