@@ -166,6 +166,8 @@ def request_stats():
         # update run time
             runners.locust_runner.stats.total_run_time()
         report["total_run_time"] = runners.locust_runner.stats.run_time
+        report["start_run_time"] = runners.locust_runner.stats.start_run_time
+        report["end_run_time"] = runners.locust_runner.stats.end_run_time
         
         # since generating a total response times dict with all response times from all
         # urls is slow, we make a new total response time dict which will consist of one

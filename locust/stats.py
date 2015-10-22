@@ -22,7 +22,9 @@ class RequestStats(object):
         self.last_request_timestamp = None
         self.start_time = None
         self.run_time = 0
+        self.start_run_time = None
         self.end_time = None
+        self.end_run_time = None
     
     def get(self, name, method):
         """
@@ -73,6 +75,8 @@ class RequestStats(object):
         else:
             self.run_time = int(time.time() - self.start_time)
             self.end_time = time.time()
+            self.start_run_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(self.start_time))
+            self.end_run_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
 
 class StatsEntry(object):
     """
