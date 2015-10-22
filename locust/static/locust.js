@@ -59,7 +59,6 @@ $('#swarm_form').submit(function(event) {
                 $("a.edit_test").fadeIn();
                 $(".user_count").fadeIn();
                 $("#end_time").html("");
-                $("#end_date").html("");
             }
         }
     );
@@ -134,7 +133,6 @@ function updateStats() {
         $("#status_text").html(report.state);
         $("#userCount").html(report.user_count);
         $("#start_time").html(report.start_run_time);
-        $("#start_date").html(report.start_run_date);
         $("#run_time").html(String(report.total_run_time).toHHMMSS());
 
         if (report.slave_count)

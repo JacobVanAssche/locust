@@ -77,14 +77,8 @@ class RequestStats(object):
         else:
             self.run_time = int(time.time() - self.start_time)
             self.end_time = time.time()
-            self.start_run_time = time.strftime('%H:%M:%S %Y-%m-%d', time.localtime(self.start_time))
-            splitStart = self.start_run_time.split();
-            self.start_run_time = splitStart[0];
-            self.start_run_date = splitStart[1];
-            self.end_run_time = time.strftime('%H:%M:%S %Y-%m-%d', time.localtime(time.time()))
-            splitEnd = self.end_run_time.split();
-            self.end_run_time = splitEnd[0];
-            self.end_run_date = splitEnd[1];
+            self.start_run_time = time.strftime('%H:%M:%S', time.localtime(self.start_time))
+            self.end_run_time = time.strftime('%H:%M:%S', time.localtime(time.time()))
 
 class StatsEntry(object):
     """
