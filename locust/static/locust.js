@@ -12,6 +12,8 @@ $("#box_stop a").click(function(event) {
     $("a.new_test").show();
     $("a.edit_test").hide();
     $(".user_count").hide();
+    $("#end_time").html(report.end_run_time);
+    $("#end_date").html(report.end_run_date);
 });
 
 $("#box_reset a").click(function(event) {
@@ -56,6 +58,8 @@ $('#swarm_form').submit(function(event) {
                 $("a.new_test").fadeOut();
                 $("a.edit_test").fadeIn();
                 $(".user_count").fadeIn();
+                $("#end_time").html("");
+                $("#end_date").html("");
             }
         }
     );
@@ -130,8 +134,8 @@ function updateStats() {
         $("#status_text").html(report.state);
         $("#userCount").html(report.user_count);
         $("#start_time").html(report.start_run_time);
+        $("#start_date").html(report.start_run_date);
         $("#run_time").html(String(report.total_run_time).toHHMMSS());
-        $("#end_time").html(report.end_run_time);
 
         if (report.slave_count)
             $("#slaveCount").html(report.slave_count)
