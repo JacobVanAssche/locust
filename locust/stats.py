@@ -21,7 +21,8 @@ class RequestStats(object):
         self.max_requests = None
         self.last_request_timestamp = None
         self.start_time = None
-        self.end_time = 0
+        self.run_time = 0
+        self.end_time = None
     
     def get(self, name, method):
         """
@@ -65,9 +66,13 @@ class RequestStats(object):
         self.last_request_timestamp = None
         self.start_time = None
         
-    def set_end_time(self):
-        self.end_time = time.time();
-        
+    def total_run_time(self):
+        # return the time that the test has been running for.
+        if self.start_time is None:
+            self.run_time = 0
+        else:
+            self.run_time = int(time.time() - self.start_time)
+            self.end_time = time.time()
 
 class StatsEntry(object):
     """
@@ -187,6 +192,7 @@ class StatsEntry(object):
             self.stats.errors[key] = entry
 
         entry.occured()
+        
 
     @property
     def fail_ratio(self):

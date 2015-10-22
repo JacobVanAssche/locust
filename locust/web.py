@@ -82,11 +82,12 @@ def request_stats_csv():
             '"Requests/s"',
             '"Start Time"',
             '"End Time"',
+            '"Run Time"',
         ])
     ]
     
     for s in chain(_sort_stats(runners.locust_runner.request_stats), [runners.locust_runner.stats.aggregated_stats("Total", full_request_history=True)]):
-        rows.append('"%s","%s",%i,%i,%i,%i,%i,%i,%i,%.2f,%s,%s' % (
+        rows.append('"%s","%s",%i,%i,%i,%i,%i,%i,%i,%.2f,%s,%s,%s' % (
             s.method,
             s.name,
             s.num_requests,
@@ -98,7 +99,8 @@ def request_stats_csv():
             s.avg_content_length,
             s.total_rps,
             s.start_time,
-            s.end_time,
+            runners.locust_runner.stats.end_time,
+            (runners.locust_runner.stats.end_time - s.start_time),
         ))
 
     response = make_response("\n".join(rows))
@@ -140,8 +142,6 @@ def distribution_stats_csv():
 @memoize(timeout=DEFAULT_CACHE_TIME, dynamic_timeout=True)
 def request_stats():
 
-    if runners.locust_runner.state == ("stopped"):
-        runners.locust_runner.stats.set_end_time()
     stats = []
     for s in chain(_sort_stats(runners.locust_runner.request_stats), [runners.locust_runner.stats.aggregated_stats("Total")]):
         stats.append({
@@ -161,6 +161,11 @@ def request_stats():
     if stats:
         report["total_rps"] = stats[len(stats)-1]["current_rps"]
         report["fail_ratio"] = runners.locust_runner.stats.aggregated_stats("Total").fail_ratio
+        
+        if runners.locust_runner.state != ("stopped" or "ready"):
+        # update run time
+            runners.locust_runner.stats.total_run_time()
+        report["total_run_time"] = runners.locust_runner.stats.run_time
         
         # since generating a total response times dict with all response times from all
         # urls is slow, we make a new total response time dict which will consist of one
